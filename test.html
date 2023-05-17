@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Web3 Libraries</title>
+</head>
+<body>
+
+  <button id="ethers-button">Test Ethers</button>
+  <button id="viem-button">Test VIEM</button>
+  <div id="output"></div>
+       
+  <script type="module">
+    import { ethers } from './node_modules/ethers/dist/ethers.min.js'
+    import { createPublicClient, http } from 'viem';
+    import { mainnet } from 'viem/chains';
+
+    const txHash = `0x7b1a7c825b0946b6147fad20f8a5eff103e6f6889a51d96cbf5288fa0e4ff82c`;
+
+    const testEthers =  async () => {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const tx = await provider.getTransaction(txHash);
+        document.getElementById("output").innerHTML = `<h3>Ethers Result</h3>${JSON.stringify(tx)}`;
+    }
+
+    const testViem =  async () => {
+      const client = createPublicClient({
+        chain: mainnet,
+        transport: http(),
+      });
+      const tx = await client.getTransaction(txHash);
+      document.getElementById("output").innerHTML = `<h3>Viem Result</h3>${JSON.stringify(tx)}`;
+    }
+
+    document.getElementById("ethers-button").onclick = testEthers;
+    document.getElementById("viem-button").onclick = testViem;
+  </script>
+</body>
+</html>
